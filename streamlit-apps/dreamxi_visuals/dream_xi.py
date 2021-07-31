@@ -12,24 +12,30 @@ def get_expn_val(rule):
         expn = 2
     elif rule == 'Cube':
         expn = 3
+    else:
+        expn = 0
     return expn
 
 
-def get_reward(share, expn, n1=0, n2=0, n3=0, n4=0):
-    names = ['Atanu', 'Bhaskar', 'Deb', 'Rajani']
+def get_reward(share, expn, n1=0.01, n2=0.01, n3=0.01, n4=0.01):
     scores = [n1,n2,n3,n4]
     cnt = sum(x > 0 for x in scores)
-    prize = cnt*share
-    scores_expn = [s**expn for s in scores]
-    scores_prop = [s/sum(scores_expn) for s in scores_expn]
-    reward_prop = [s*prize for s in scores_prop] 
-    data_tuples = list(zip(names,reward_prop,scores))
-    df = pd.DataFrame(data_tuples, columns=['Name','Reward','Score'])
-    df['Risk'] = np.where(df['Score']>0, share, 0)
-    df['Profit/Loss'] = df['Reward'] - df['Risk']
-    df = df[['Name','Risk', 'Reward', 'Profit/Loss']]
-    df['Reward'] = df['Reward'].round(1)
-    df['Profit/Loss'] = df['Profit/Loss'].round(1)
+    if sum(scores) == 0:
+        df = pd.DataFrame(columns = ['Name','Risk', 'Reward', 'Profit/Loss'])
+    else:
+        names = ['Atanu', 'Bhaskar', 'Deb', 'Rajani']
+
+        prize = cnt*share
+        scores_expn = [s**expn for s in scores]
+        scores_prop = [s/sum(scores_expn) for s in scores_expn]
+        reward_prop = [s*prize for s in scores_prop] 
+        data_tuples = list(zip(names,reward_prop,scores))
+        df = pd.DataFrame(data_tuples, columns=['Name','Reward','Score'])
+        df['Risk'] = np.where(df['Score']>0, share, 0)
+        df['Profit/Loss'] = df['Reward'] - df['Risk']
+        df = df[['Name','Risk', 'Reward', 'Profit/Loss']]
+        df['Reward'] = df['Reward'].round(1)
+        df['Profit/Loss'] = df['Profit/Loss'].round(1)
     return df 
 
 def get_plot_bar_graph(df):
@@ -66,24 +72,10 @@ with st.sidebar.form(key ='Form1'):
 
 expn = get_expn_val(rule)
 reward_prop = get_reward(share, expn, Atanu,Bhaskar,Deb,Rajani)
-
-st.header("Results")
-#st.subheader("Selection of predicted retention times")
-st.dataframe(reward_prop)
-get_plot_bar_graph(reward_prop)
-
-
-
-import numpy as np
-import matplotlib.pyplot as plt
- 
-  
-# creating the dataset
-data = {'C':20, 'C++':15, 'Java':30,
-        'Python':35}
-courses = list(data.keys())
-values = list(data.values())
-  
-fig = plt.figure(figsize = (10, 5))
- 
-# creating the bar plot
+if reward_prop.shape[0] == 0:
+    st.markdown("Enter values in the sidebar")
+else:
+    st.header("Results")
+    #st.subheader("Selection of predicted retention times")
+    st.dataframe(reward_prop)
+    get_plot_bar_graph(reward_prop)
