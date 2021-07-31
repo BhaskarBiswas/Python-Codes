@@ -67,7 +67,6 @@ with st.sidebar.form(key ='Form1'):
     Bhaskar = st.number_input('Bhaskar', step=0.1, key="n2")
     Deb = st.number_input('Deb', step=0.1, key="n3")
     Rajani = st.number_input('Rajani', step=0.1, key="n4")
-    op = st.selectbox('Operator',('None', 'Addition', 'Subtraction', 'Multiplication', 'Division'))
     submit = st.form_submit_button(label = "Submit")
 
 expn = get_expn_val(rule)
