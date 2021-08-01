@@ -36,6 +36,14 @@ def get_reward(share, expn, n1=0.01, n2=0.01, n3=0.01, n4=0.01):
         df = df[['Name','Risk', 'Reward', 'Profit/Loss']]
         df['Reward'] = df['Reward'].round(1)
         df['Profit/Loss'] = df['Profit/Loss'].round(1)
+        if df['Profit/Loss'].sum() > 0:
+          adj = df['Profit/Loss'].sum()
+          idx = df['Profit/Loss'].idxmax()
+          df.loc[idx, 'Profit/Loss'] -= adj
+        elif df['Profit/Loss'].sum() < 0:
+          adj = df['Profit/Loss'].sum()
+          idx = df['Profit/Loss'].idxmin()
+          df.loc[idx, 'Profit/Loss'] -= adj
     return df 
 
 def get_plot_bar_graph(df):
@@ -55,6 +63,24 @@ def get_plot_bar_graph(df):
     plt.show()
     st.write(fig)
 
+def get_allocation(D):
+    neg_D = {}
+    pos_D = {}
+    for key in D:
+        if D[key] >= 0:
+            pos_D[key] = D[key]
+        else:
+            neg_D[key] = D[key]
+    pos_D = dict(sorted(pos_D.items(), key = lambda x:(x[1],x[0]), reverse=True))
+    neg_D = dict(sorted(neg_D.items(), key = lambda x:(x[1],x[0])))
+    transfer = []
+    for p in pos_D:
+        for n in neg_D:
+            amt = round(min(pos_D[p],abs(neg_D[n])),1)
+            pos_D[p] = pos_D[p] - amt
+            neg_D[n] = neg_D[n] + amt
+            transfer.append((n,p,amt))
+    return transfer
 
 st.title("Dream XI !")
 my_form = st.sidebar
@@ -71,6 +97,8 @@ with st.sidebar.form(key ='Form1'):
 
 expn = get_expn_val(rule)
 reward_prop = get_reward(share, expn, Atanu,Bhaskar,Deb,Rajani)
+
+reward_dict = reward_prop.set_index('Name')['Profit/Loss'].to_dict()
 if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
 else:
@@ -78,3 +106,13 @@ else:
     #st.subheader("Selection of predicted retention times")
     st.dataframe(reward_prop)
     get_plot_bar_graph(reward_prop)
+
+
+transfer_list = get_allocation(reward_dict)
+
+print(transfer_list)
+
+for trsr in transfer_list:
+    if trsr[2]>0:
+      st.subheader("{} pays Rs. {} to {}".format(trsr[0], trsr[2], trsr[1]))
+
