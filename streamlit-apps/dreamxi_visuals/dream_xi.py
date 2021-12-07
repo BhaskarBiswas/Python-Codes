@@ -87,6 +87,7 @@ my_form = st.sidebar
 #(key = "form2")
 # Text box
 with st.sidebar.form(key ='Form1'):
+    match_name = st.text_input('Match Description', key="match_name")
     share = st.number_input('Player share', step=1, key="share")
     rule = st.selectbox('Rule',('None', 'Linear', 'Square', 'Cube'))
     Atanu = st.number_input('Atanu', step=0.1, key="n1")
@@ -103,7 +104,7 @@ if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
 else:
     st.header("Results")
-    #st.subheader("Selection of predicted retention times")
+    st.subheader(match_name)
     st.dataframe(reward_prop)
     get_plot_bar_graph(reward_prop)
 
