@@ -21,7 +21,7 @@ def get_reward(share, expn, n1=0.01, n2=0.01, n3=0.01, n4=0.01):
     scores = [n1,n2,n3,n4]
     cnt = sum(x > 0 for x in scores)
     if sum(scores) == 0:
-        df = pd.DataFrame(columns = ['Name','Risk', 'Reward', 'Profit/Loss'])
+        df = pd.DataFrame(columns = ['Name', 'Score', 'Risk', 'Reward', 'Profit/Loss'])
     else:
         names = ['Atanu', 'Bhaskar', 'Deb', 'Rajani']
 
@@ -33,7 +33,7 @@ def get_reward(share, expn, n1=0.01, n2=0.01, n3=0.01, n4=0.01):
         df = pd.DataFrame(data_tuples, columns=['Name','Reward','Score'])
         df['Risk'] = np.where(df['Score']>0, share, 0)
         df['Profit/Loss'] = df['Reward'] - df['Risk']
-        df = df[['Name','Risk', 'Reward', 'Profit/Loss']]
+        df = df[['Name', 'Score', 'Risk', 'Reward', 'Profit/Loss']]
         df['Reward'] = df['Reward'].round(1)
         df['Profit/Loss'] = df['Profit/Loss'].round(1)
         if df['Profit/Loss'].sum() > 0:
