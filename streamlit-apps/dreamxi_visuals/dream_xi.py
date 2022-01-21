@@ -104,7 +104,7 @@ if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
 else:
     st.header(match_name)
-    st.subheader(rule)
+    st.subheader("Rule: ", rule)
     st.dataframe(reward_prop)
     get_plot_bar_graph(reward_prop)
 
