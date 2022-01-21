@@ -103,8 +103,8 @@ reward_dict = reward_prop.set_index('Name')['Profit/Loss'].to_dict()
 if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
 else:
-    st.header("Results")
-    st.subheader(match_name)
+    st.header(match_name)
+    st.subheader(rule)
     st.dataframe(reward_prop)
     get_plot_bar_graph(reward_prop)
 
