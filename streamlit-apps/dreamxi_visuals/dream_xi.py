@@ -100,11 +100,12 @@ expn = get_expn_val(rule)
 reward_prop = get_reward(share, expn, Atanu,Bhaskar,Deb,Rajani)
 
 reward_dict = reward_prop.set_index('Name')['Profit/Loss'].to_dict()
+rule_txt = "Rule: " + rule
 if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
 else:
     st.header(match_name)
-    st.subheader("Rule: ", rule)
+    st.subheader(rule_txt)
     st.dataframe(reward_prop)
     get_plot_bar_graph(reward_prop)
 
