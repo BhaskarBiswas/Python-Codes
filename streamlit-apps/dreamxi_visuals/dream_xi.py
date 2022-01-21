@@ -101,7 +101,7 @@ expn = get_expn_val(rule)
 reward_prop = get_reward(share, expn, Atanu,Bhaskar,Deb,Rajani)
 
 reward_dict = reward_prop.set_index('Name')['Profit/Loss'].to_dict()
-share_txt = "Share: " + share
+share_txt = "Share: " + str(share)
 rule_txt = "Rule: " + rule
 if reward_prop.shape[0] == 0:
     st.markdown("Enter values in the sidebar")
