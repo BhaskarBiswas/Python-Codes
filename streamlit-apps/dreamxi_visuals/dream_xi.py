@@ -44,6 +44,7 @@ def get_reward(share, expn, n1=0.01, n2=0.01, n3=0.01, n4=0.01):
           adj = df['Profit/Loss'].sum()
           idx = df['Profit/Loss'].idxmin()
           df.loc[idx, 'Profit/Loss'] -= adj
+        df.drop(['Risk'], axis=1)
     return df 
 
 def get_plot_bar_graph(df):
