@@ -2,5 +2,5 @@ matplotlib==3.3.4
 pandas==1.2.4
 scipy==1.6.2
 scikit_learn==0.24.2
-numpy==1.21.1
+numpy==1.22.0
 streamlit==1.0.0
